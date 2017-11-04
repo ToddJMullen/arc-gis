@@ -1,7 +1,7 @@
 /***********************
  *	Project		: ArcGIS-2d
  *	Author		: Todd Mullen
- *	Document	: menu.js
+ *	Document	: Menu.js
  *	Created		: Nov 3, 2017, 9:29:51 PM
  *	Description	:
  *      Controls
@@ -26,18 +26,24 @@ function Menu( pageAry ){
 		console.log(`Menu::build(), pageAry:`, pageAry );
 		var body		= $("body")
 		,nav			= body.find("#pageNav")
+		,btns			= ""
 		;
 
 		if( nav.length < 1 ){
 			nav = $(`<nav><ul></ul></nav>`);
 			body.append( nav );
+			nav = nav.find("ul");
 		}
 
 		pageAry.map(function makeLinkBtn( /*var Page*/ pg){
-			var btn = $(`<a href="${pg.path}" `)
+			btns += `<li><a href="${pg.path}" title="${pg.title}" class="btn btn-sm">${pg.label}</a></li>`;
 		});
+		nav.append( btns );
 	}
-}//menu()
+}//Menu()
+
+menu = new Menu( pageAry );
+menu.build();
 
 
 
