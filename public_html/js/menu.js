@@ -14,6 +14,30 @@ pageAry = [
 	,Page( "basic-3d.html", "#d SceneView", "Intro to SceneView - Create a 3D map", Page.CAT_3D )
 ];
 
+function Menu( pageAry ){
+
+	var api = {
+		pageAry: pageAry
+		,build	: build
+	};
+	return api;
+
+	function build(){
+		console.log(`Menu::build(), pageAry:`, pageAry );
+		var body		= $("body")
+		,nav			= body.find("#pageNav")
+		;
+
+		if( nav.length < 1 ){
+			nav = $(`<nav><ul></ul></nav>`);
+			body.append( nav );
+		}
+
+		pageAry.map(function makeLinkBtn( /*var Page*/ pg){
+			var btn = $(`<a href="${pg.path}" `)
+		});
+	}
+}//menu()
 
 
 

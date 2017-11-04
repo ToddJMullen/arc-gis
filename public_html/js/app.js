@@ -10,5 +10,18 @@
 /* global  */
 
 
+var app = {
+	MAP_TYPE	: {
+		STREETS			: "streets"
+		,TOPO			: "topo"
+		,SATELLITE		: "satellite"
+		,HYBRID			: "hybrid"
+		,GRAY			: "gray"
+		,GRAY_DARK		: "dark-gray"
+		,OCEANS			: "oceans"
+		,OSM			: "osm"
+		,NAT_GEO		: "national-geographic"
+	}
+};
 
 

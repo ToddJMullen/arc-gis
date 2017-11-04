@@ -7,6 +7,8 @@
  *      Controls
  ***********************/
 
+
+
 function Page( relPath, name, title, cat ){
 	return {
 		path: relPath
@@ -18,6 +20,8 @@ function Page( relPath, name, title, cat ){
 
 Page.prototype.CAT_2D = "2d";
 Page.prototype.CAT_3D = "3d";
+
+
 
 
 function PageBtn( page ){
