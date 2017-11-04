@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
 	<head>
-		<title>ArcGIS Demos</title>
+		<title>ArcGIS-2d | Intro to MapView - Create a 2D map</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="images/icons/favicon.png" rel="icon" type="image/png" />
@@ -32,7 +32,9 @@ and open the template in the editor.
 				  var view = new MapView({
 					  container: "divMapView"
 					  ,map: map
-				  })
+					  ,zoom: 4
+					  ,center: [15, 65]
+				  });
 
 
 
@@ -45,14 +47,7 @@ and open the template in the editor.
 
 	</head>
 	<body>
-		<div>
-			<h1>ArcGIS Demos</h1>
-			<nav>
-				<ul>
-					<li><a href="basic-2d.html">Basic 2D</a></li>
-				</ul>
-			</nav>
-			<div id="divMapView"></div>
-		</div>
+		<h1>ArcGIS 2D</h1>
+		<div id="divMapView"></div>
 	</body>
 </html>
