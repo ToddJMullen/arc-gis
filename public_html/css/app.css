@@ -11,9 +11,19 @@
 
 
 
-html, body, #divMapView {
+html, body{
     padding: 0;
     margin: 0;
     height: 100%;
     width: 100%;
-  }
+}
+
+#divMapView{
+	height: 80%; width: 80%;
+	margin: 35px auto;
+}
+
+
+#layerToggle{
+	margin-left: 10px;
+}
