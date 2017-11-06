@@ -18,7 +18,7 @@ html, body{
     width: 100%;
 }
 
-#divMapView{
+#divContainer{
 	height: 80%; width: 80%;
 	margin: 35px auto;
 }

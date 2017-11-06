@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>ArcGIS-2d v4.5 | Intro to MapView - Create a 2D map</title>
+		<title>ArcGIS-2d v4.5 | Intro to MapView + PopUps</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="/ArcGIS/images/icons/favicon.png" rel="icon" type="image/png" />
@@ -21,31 +21,38 @@
 		<script src="https://js.arcgis.com/4.5/"></script>
 		<script>
 			require([
-				"esri/Map"
+				"esri/tasks/Locator"
+				,"esri/Map"
 				,"esri/views/MapView"
-				,"dojo/ready"
-			  ], function(Map, MapView) {
-				  console.log("domReady() Creating Map...");
-
-				  var map = new Map({
-					  basemap: app.MAP_TYPE.STREETS
-				  });
-
-				  var view = new MapView({
-					  container: "divContainer"
-					  ,map: map
-					  ,zoom: 4
-					  ,center: [15, 65]
-				  });
-
-
-
-			  });
+				,"dojo/domReady!"
+			], onScriptsLoaded );
+			
+			function onScriptsLoaded(
+				//dependency injected vars from required scripts above
+				Locator, Map, MapView
+			){
+				console.log("onScriptsLoaded()");
+				//create the locator task / utility
+				var utilLocator	= new Locator({
+					url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+				})
+				//create the map to display
+				,streetMap		= new Map({
+					basemap: app.MAP_TYPE.STREETS
+				})
+				//create the view to rendet the map in
+				,view			= new MapView({
+					container: "divContainer"
+					map: streetMap
+				})
+				;
+				
+				
+				
+			}///onScriptsLoaded()
 		</script>
 
-<!--
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
-		<script src="js/App.js" type="text/javascript"></script>-->
+
 
 	</head>
 	<body>
