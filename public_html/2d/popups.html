@@ -49,6 +49,49 @@
 				})
 				;
 				
+				view.on("click", showLocationPopup );
+				
+				function showLocationPopup(e){
+//					e.stopPropagation();
+					console.log("showLocationPopup() map click:", e );
+					//get the clicked map coords
+					var lat	= e.mapPoint.latitude
+					,lng	= e.mapPoint.longitude
+					;
+					
+					//open the/a popup at that point
+					view.popup.open({
+						title: "Reverse geocode:<br />Lat: " + lat + ",<br />Long: " + lng
+						,location: e.mapPoint
+					})
+					
+					utilLocator
+						.locationToAddress( e.mapPoint )
+						.then( function onLocationRsp(rsp){
+							showPopupAddress(rsp, e); 
+						})
+						.otherwise( function onLocationnErr(err){
+							handleErrorAddress(err, e);
+						})
+					
+				}//showLocationPopup()
+				
+				function showPopupAddress(rsp, e){
+					console.log("showPopupAddress()", rsp );
+//					view.popup.content = rsp.address;
+					view.popup.open({
+						content: rsp.address
+						,location: e.mapPoint
+					})
+				}//showPopupAddress()
+				
+				function handleErrorAddress(err, e){
+					console.error("handleErrorAddress()", err );
+					view.popup.open({
+						content: "No address data was found for this location."
+						,location: e.mapPoint
+					});
+				}//handleErrorAddress()
 				
 				
 			}///onScriptsLoaded()
@@ -59,7 +102,7 @@
 	</head>
 	<body>
 		<a href="/ArcGIS/" class="btn btn-sm btn-default pull-right">Home</a>
-		<h1>ArcGIS 2D, v4.5, Intro to MapView</h1>
+		<h1>ArcGIS 2D, v4.5, Intro to MapView + PopUps</h1>
 		<div id="divContainer"></div>
 	</body>
 </html>
