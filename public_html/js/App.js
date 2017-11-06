@@ -22,6 +22,9 @@ var app = {
 		,OSM			: "osm"
 		,NAT_GEO		: "national-geographic"
 	}
+	,MAP_COORDS: {
+		BOISE_IDAHO: [-116.3031, 43.6088]
+	}
 };
 
 
