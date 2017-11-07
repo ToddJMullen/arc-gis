@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ArcGIS-3D v4.5 | SceneView - Create a Local Scene</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="/ArcGIS/images/icons/favicon.png" rel="icon" type="image/png" />
+
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+
+		<link href="/ArcGIS/css/app.css" rel="stylesheet" type="text/css">
+
+		<link rel="stylesheet" href="https://js.arcgis.com/4.5/esri/css/main.css">
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js" type="text/javascript"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+		<script src="/ArcGIS/js/Models.js" type="text/javascript"></script>
+		<script src="/ArcGIS/js/Menu.js" type="text/javascript"></script>
+		<script src="/ArcGIS/js/App.js" type="text/javascript"></script>
+		<script src="https://js.arcgis.com/4.5/"></script>
+		<script>
+			require( [
+				"esri/Map"
+				, "esri/views/SceneView"
+				, "dojo/domReady!"
+			], function(Map, SceneView){
+				console.log( "domReady() Creating Map..." );
+
+				var theMap = new Map( {
+					basemap: app.MAP_TYPE.TOPO
+				} )
+				,view = new SceneView( {
+					container: "divContainer"
+					, map: theMap
+					, zoom: 4
+					, center: app.MAP_COORDS.SWEDEN_NORTH
+					,viewingMode	: "local"
+					,clippingArea: kansasExtent
+				} );
+
+
+				menu.build();
+
+			} );
+		</script>
+
+
+	</head>
+	<body>
+		<h1>ArcGIS 3D, v4.5, SceneView, Creating a Local Scene</h1>
+		<div id="divContainer"></div>
+		<script src="js/Menu.js" type="text/javascript"></script>
+	</body>
+</html>
