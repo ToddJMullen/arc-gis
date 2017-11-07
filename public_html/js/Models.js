@@ -15,6 +15,9 @@ function Page( relPath, name, title, cat ){
 		,name: name
 		,title: title
 		,category: cat
+		,getPath: function(){
+			return cat + "/" + relPath;
+		}
 	};
 }
 

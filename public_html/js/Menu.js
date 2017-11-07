@@ -10,13 +10,13 @@
 /* global Page, $ */
 
 pageAry = [
-	Page(  "/ArcGIS/", "Home", "Home", Page.CAT_NONE )
-	,Page( "basic-2d.html", "2d MapView", "Basic 2D MapView", Page.CAT_2D )
-	,Page( "popups.html", "2d MapView", "Intro Popups", Page.CAT_2D )
-	,Page( "widgets.html", "2d MapView", "Intro Widgets", Page.CAT_2D )
-	,Page( "basic-3d.html", "3d SceneView", "Intro to SceneView", Page.CAT_3D )
-	,Page( "localScene.html", "3d Local Scene", "LocalScene", Page.CAT_3D )
-	,Page( "tileLayer.html", "3d Tile Layer", "TileLayer", Page.CAT_3D )
+	Page(  "/ArcGIS/", "Home", "Home", "" )
+	,Page( "basic-2d.html", "2d MapView", "Basic 2D MapView", "2d" )
+	,Page( "popups.html", "2d MapView", "Intro Popups", "2d" )
+	,Page( "widgets.html", "2d MapView", "Intro Widgets", "2d" )
+	,Page( "basic-3d.html", "3d SceneView", "Intro to SceneView", "3d" )
+	,Page( "localScene.html", "3d Local Scene", "LocalScene", "3d" )
+	,Page( "tileLayer.html", "3d Tile Layer", "TileLayer", "3d" )
 ];
 
 function Menu( pageAry ){
@@ -41,7 +41,7 @@ function Menu( pageAry ){
 		}
 
 		pageAry.map(function makeLinkBtn( /*var Page*/ pg){
-			btns += `<li><a href="${pg.path}" title="${pg.title}"
+			btns += `<li><a href="${pg.getPath()}" title="${pg.title}"
 					 class="btn btn-sm btn-default">${pg.title}</a></li>`;
 		});
 		nav.prepend( btns );
