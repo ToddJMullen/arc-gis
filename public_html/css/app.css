@@ -27,3 +27,27 @@ html, body{
 #layerToggle{
 	margin-left: 10px;
 }
+nav{
+	display: block;
+    /* margin: 10px 5px; */
+    /* transform: rotate(-90deg); */
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    max-width: 120px;
+    text-align: right;
+    padding-left: 0;
+}
+nav ul,
+nav li{
+	padding-left: 0;
+	/*margin-left: -20px;*/
+	width: 100%
+}
+
+nav li{
+	display: inline-block;
+	float: left;
+	margin: 0 2px 0 0;
+
+}

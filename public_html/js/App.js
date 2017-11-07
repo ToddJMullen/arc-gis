@@ -25,6 +25,7 @@ var app = {
 	,MAP_COORDS: {
 		BOISE_IDAHO		: [-116.3031, 43.6088]
 		,INDIANA		: [-86.049, 38.485]
+		,SWEDEN_NORTH	: [15, 65]
 	}
 	,POSITION	: {
 		TOP_RIGHT	: "top-right"

@@ -18,8 +18,9 @@ function Page( relPath, name, title, cat ){
 	};
 }
 
-Page.prototype.CAT_2D = "2d";
-Page.prototype.CAT_3D = "3d";
+Page.prototype.CAT_NONE	= "";
+Page.prototype.CAT_2D	= "2d";
+Page.prototype.CAT_3D	= "3d";
 
 
 
