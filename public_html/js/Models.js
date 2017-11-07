@@ -16,7 +16,7 @@ function Page( relPath, name, title, cat ){
 		,title: title
 		,category: cat
 		,getPath: function(){
-			return cat + "/" + relPath;
+			return "/ArcGIS/" + cat + "/" + relPath;
 		}
 	};
 }

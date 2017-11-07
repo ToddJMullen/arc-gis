@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>ArcGIS-3D v4.5 | SceneView - Create a 3D map</title>
+		<title>ArcGIS-3D v4.5 | PageTitle</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="/ArcGIS/images/icons/favicon.png" rel="icon" type="image/png" />
@@ -23,7 +23,7 @@
 	</head>
 	<body>
 		
-		<h1>ArcGIS 3D, v4.5, Intro to MapView</h1>
+		<h1>ArcGIS 3D, v4.5, PageTitle</h1>
 		<div id="divContainer"></div>
 		
 		<script>
@@ -31,14 +31,14 @@
 				"esri/Map"
 				,"esri/views/SceneView"
 				,"dojo/domReady!"
-			  ], function(Map, MapView) {
-				  console.log("domReady() Creating Map...");
+			  ], function(Map, SceneView) {
+				  console.log("domReady() Creating Map & SceneView...");
 
 				  var map = new Map({
 					  basemap: app.MAP_TYPE.STREETS
 				  });
 
-				  var view = new MapView({
+				  var view = new SceneView({
 					  container: "divContainer"
 					  ,map: map
 					  ,zoom: 4

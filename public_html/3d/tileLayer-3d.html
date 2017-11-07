@@ -16,9 +16,18 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js" type="text/javascript"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
 		<script src="/ArcGIS/js/Models.js" type="text/javascript"></script>
-		<script src="/ArcGIS/js/Menu.js" type="text/javascript"></script>
 		<script src="/ArcGIS/js/App.js" type="text/javascript"></script>
 		<script src="https://js.arcgis.com/4.5/"></script>
+
+
+	</head>
+	<body>
+		<a href="/ArcGIS/" class="btn btn-sm btn-default pull-right">Home</a>
+		<h1>ArcGIS 3D, SceneView + TileLayers</h1>
+		<span id="layerToggle">
+			<input id="cbTransportOn" type="checkbox" > Transportation
+		</span>
+		<div id="divContainer"></div>
 		<script>
 			require([
 				"esri/Map"
@@ -86,15 +95,6 @@
 
 			  });//onScriptsLoaded()
 		</script>
-
-
-	</head>
-	<body>
-		<a href="/ArcGIS/" class="btn btn-sm btn-default pull-right">Home</a>
-		<h1>ArcGIS 3D, SceneView + TileLayers</h1>
-		<span id="layerToggle">
-			<input id="cbTransportOn" type="checkbox" > Transportation
-		</span>
-		<div id="divContainer"></div>
+		<script src="/ArcGIS/js/Menu.js" type="text/javascript"></script>
 	</body>
 </html>

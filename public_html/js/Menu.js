@@ -11,12 +11,14 @@
 
 pageAry = [
 	Page(  "/ArcGIS/", "Home", "Home", "" )
+	,Page( "2d-template.html", "2D Template", "2D Template", "2d")
 	,Page( "basic-2d.html", "2d MapView", "Basic 2D MapView", "2d" )
 	,Page( "popups.html", "2d MapView", "Intro Popups", "2d" )
 	,Page( "widgets.html", "2d MapView", "Intro Widgets", "2d" )
 	,Page( "basic-3d.html", "3d SceneView", "Intro to SceneView", "3d" )
+	,Page( "3d-template.html", "3d Template", "3D Template", "3d" )
 	,Page( "localScene.html", "3d Local Scene", "LocalScene", "3d" )
-	,Page( "tileLayer.html", "3d Tile Layer", "TileLayer", "3d" )
+	,Page( "tileLayer-3d.html", "3d Tile Layer", "3D TileLayer", "3d" )
 ];
 
 function Menu( pageAry ){
@@ -49,6 +51,7 @@ function Menu( pageAry ){
 }//Menu()
 
 menu = new Menu( pageAry );
+menu.build()
 
 
 
