@@ -23,7 +23,14 @@ var app = {
 		,NAT_GEO		: "national-geographic"
 	}
 	,MAP_COORDS: {
-		BOISE_IDAHO: [-116.3031, 43.6088]
+		BOISE_IDAHO		: [-116.3031, 43.6088]
+		,INDIANA		: [-86.049, 38.485]
+	}
+	,POSITION	: {
+		TOP_RIGHT	: "top-right"
+		,TOP_RIGHT	: "top-left"
+		,BOT_LEFT	: "bottom-left"
+		,BOT_RIGHT	: "bottom-right"
 	}
 };
 
