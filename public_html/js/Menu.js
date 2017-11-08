@@ -31,7 +31,7 @@ function Menu( pageAry ){
 	return api;
 
 	function build(){
-		console.log(`Menu::build(), pageAry:`, pageAry );
+//		console.log(`Menu::build(), pageAry:`, pageAry );
 		var body		= $("body")
 		,nav			= body.find("#pageNav")
 		,btns			= ""
