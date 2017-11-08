@@ -19,38 +19,180 @@
 		<script src="/ArcGIS/js/App.js" type="text/javascript"></script>
 		<script src="https://js.arcgis.com/4.5/"></script>
 
-<!--
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
-		<script src="js/App.js" type="text/javascript"></script>-->
+		<!--
+				<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+				<script src="js/App.js" type="text/javascript"></script>-->
 
 	</head>
 	<body>
-		
+
 		<h1>ArcGIS 2D, v4.5, Drawing Polygons</h1>
-		<div id="divContainer"></div>
-		
+		<div id="divContainer">
+			<div id="btnDrawPolygon"
+				 class="esri-widget esri-widget-button esri-interactive"
+				 title="Draw & Measure the area of a Polygon">
+				<span class="esri-icon-polygon"></span>
+			</div>
+		</div>
+
 		<script>
-			require([
-				"esri/Map"
-				,"esri/views/MapView"
-				,"dojo/ready"
-			  ], function(Map, MapView) {
-				  console.log("domReady() Creating Map & MapView...");
+			require( [
+				"esri/views/2d/draw/Draw"
+				, "esri/Map"
+				, "esri/views/MapView"
+				, "esri/Graphic"
+				, "esri/geometry/Polygon"
+				, "esri/geometry/geometryEngine"
+				, "dojo/domReady!"
+			], function(Draw
+				, Map, MapView
+				, Graphic, Polygon, geometryEngine){
+				console.log( "domReady() Creating Map & MapView..." );
 
-				  var map = new Map({
-					  basemap: app.MAP_TYPE.STREETS
-				  });
+				var map = new Map( {
+					basemap: app.MAP_TYPE.STREETS
+				} )
+					, view = new MapView( {
+						container: "divContainer"
+						, map: map
+						, zoom: 15
+						, center: app.MAP_COORDS.WASHINGTON_DC
+					} );
 
-				  var view = new MapView({
-					  container: "divContainer"
-					  ,map: map
-					  ,zoom: 4
-					  ,center: [15, 65]
-				  });
+				view.ui.add( "btnDrawPolygon", app.POSITION.TOP_LEFT );
 
 
 
-			  });
+				//remember the view is a Promise, we'll attach a onLoad handler with then
+				view.then( function onViewLoaded(e){
+					console.log( "onViewLoaded()", e );
+					var draw = new Draw( {
+						view: view
+					} )
+					//create the button from the element added to the ui by id
+					,btnDrawPolygon = document.getElementById( "btnDrawPolygon" )
+					;
+
+					btnDrawPolygon.addEventListener( "click", function onBtnDrawClick(e){
+						console.log( "onBtnDrawClick()", e );
+						//clear previous graphics
+						view.graphics.removeAll();
+						enableCreatePolygon( draw, view );
+					} )//onBtnDrawClick()
+
+				} );//onViewLoaded()
+
+
+				function enableCreatePolygon( drawInstance, viewTarget ){
+					console.log("enableCreatePolygon()", drawInstance, viewTarget );
+
+					var drawEvtSource = drawInstance.create("polygon");
+
+					//focus on the view to activate the keyboard shortcuts
+					viewTarget.focus();
+
+					//listen for vertex-add events
+					drawEvtSource.on("vertex-add", drawPolygon );
+
+					//listen for the cursor-update events
+					drawEvtSource.on("cursor-update", drawPolygon );
+
+					//listen for vertex-remove events
+					drawEvtSource.on("vertex-remove", drawPolygon );
+
+					//listen for the draw complete event
+					drawEvtSource.on("draw-complete", drawPolygon );
+
+				}//enableCreatePolygon()
+
+				function drawPolygon(e){
+					console.log("drawPolygon()", e );
+					//get the polygon's current vertices
+					var verticeAry	= e.vertices;
+
+					//clear the previous drawings
+					view.graphics.removeAll();
+
+					//create a new one to replace it
+					var newPoly	= createPolygon( verticeAry );
+
+					//turn the polygon into a graphic
+					var polyGraph = createGraphic( newPoly );
+					//replace the erased one
+					view.ui.add( polyGraph );
+
+					var area = geometryEngine.geodesicArea( newPoly, "acres" );
+
+					if( area < 0 ){
+						//something went wrong?
+						//simplify & try again
+						var simplifiedPoly = geometryEngine.simplify( newPoly );
+						if( simplifiedPoly ){
+							area = geometryEngine.geodesicArea( simplifiedPoly, "acres" );
+						}
+
+					}
+
+					labelAreas( newPoly, area, "acres" );
+
+				}//drawPolygon()
+
+				//convenience method
+				function createPolygon( verticeAry ){
+					console.log("createPolygon()", verticeAry );
+
+					return new Polygon({
+						rings: verticeAry
+						,spatialReference: view.spatialReference
+					});
+
+				}//createPolygon()
+
+				//conveniece function
+				function createGraphic( polygon ){
+					console.log("createGraphic()", polygon );
+					 graphic = new Graphic({
+						geometry: polygon
+						,symbol: {
+							type: "simple-fill"
+							,color: [77, 237, 177, 0.5]
+							,style: "solid"
+							,outline: {
+								color: [255, 177, 177, 0.9]
+								,width: 2
+							}
+						}
+					});
+					console.log("createGraphic() created:", graphic );
+					return graphic;
+				}//createGraphic()
+
+
+				function labelAreas( geomObj, area, units ){
+					console.log("labelAreas()", geomObj, area, units );
+					var textArea = new Graphic({
+						geomObj: geomObj.centroid
+						,symbol: {
+							type: "text"
+							,color: "white"
+							,haloColor: "black"
+							,haloSize: "2px"
+							,text: area.toFixed(2) + units
+							,xOffset: 3
+							,yOffset: 3
+							,font: {
+								size: 14
+								,family: "sans-serif"
+							}
+						}
+					});
+					console.log("labelAreas() created;", textArea );
+					view.graphics.app( textArea );
+				}
+
+
+
+			} );
 		</script>
 		<script src="/ArcGIS/js/Menu.js" type="text/javascript"></script>
 	</body>
