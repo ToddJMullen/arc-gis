@@ -12,6 +12,7 @@
 pageAry = [
 	Page(  "/ArcGIS/", "Home", "Home", "" )
 	,Page( "2d-template.html", "2D Template", "2D Template", "2d")
+	,Page( "drawingPolygons.html", "2D Polygons", "2D Drawing Polygons", "2d")
 	,Page( "basic-2d.html", "2d MapView", "Basic 2D MapView", "2d" )
 	,Page( "popups.html", "2d MapView", "Intro Popups", "2d" )
 	,Page( "widgets.html", "2d MapView", "Intro Widgets", "2d" )
