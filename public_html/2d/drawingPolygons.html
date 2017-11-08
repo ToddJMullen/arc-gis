@@ -176,13 +176,13 @@
 				function labelAreas( geomObj, area, units ){
 					console.log("labelAreas()", geomObj, area, units );
 					var textArea = new Graphic({
-									geomObj: geomObj.centroid
+									geometry: geomObj.centroid
 									,symbol: {
 										type: "text"
 										,color: "white"
 										,haloColor: "black"
 										,haloSize: "1px"
-										,text: area.toFixed(2) + units
+										,text: area.toFixed(2) + " " + units
 										,xoffset: 3
 										,yoffset: 3
 										,font: {
@@ -193,7 +193,7 @@
 					});
 					console.log("labelAreas() created;", textArea );
 					mapView.graphics.add( textArea );
-				}
+				}//labelAreas()
 
 
 
