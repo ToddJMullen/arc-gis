@@ -43,6 +43,7 @@
 				, "esri/Graphic"
 				, "esri/geometry/Polygon"
 				, "esri/geometry/geometryEngine"
+
 				, "dojo/domReady!"
 			], function(Draw
 				, Map, MapView
@@ -50,24 +51,24 @@
 				console.log( "domReady() Creating Map & MapView..." );
 
 				var map = new Map( {
-					basemap: app.MAP_TYPE.STREETS
+					basemap: app.MAP_TYPE.STREET_NIGHTS_VECTOR
 				} )
-					, view = new MapView( {
-						container: "divContainer"
-						, map: map
-						, zoom: 15
-						, center: app.MAP_COORDS.WASHINGTON_DC
-					} );
+				,mapView = new MapView( {
+					container: "divContainer"
+					, map: map
+					, zoom: 15
+					, center: app.MAP_COORDS.WASHINGTON_DC
+				} );
 
-				view.ui.add( "btnDrawPolygon", app.POSITION.TOP_LEFT );
+				mapView.ui.add( "btnDrawPolygon", app.POSITION.TOP_LEFT );
 
 
 
 				//remember the view is a Promise, we'll attach a onLoad handler with then
-				view.then( function onViewLoaded(e){
+				mapView.then( function onViewLoaded(e){
 					console.log( "onViewLoaded()", e );
 					var draw = new Draw( {
-						view: view
+						view: mapView
 					} )
 					//create the button from the element added to the ui by id
 					,btnDrawPolygon = document.getElementById( "btnDrawPolygon" )
@@ -76,8 +77,8 @@
 					btnDrawPolygon.addEventListener( "click", function onBtnDrawClick(e){
 						console.log( "onBtnDrawClick()", e );
 						//clear previous graphics
-						view.graphics.removeAll();
-						enableCreatePolygon( draw, view );
+						mapView.graphics.removeAll();
+						enableCreatePolygon( draw, mapView );
 					} )//onBtnDrawClick()
 
 				} );//onViewLoaded()
@@ -105,63 +106,67 @@
 
 				}//enableCreatePolygon()
 
+
+
 				function drawPolygon(e){
 					console.log("drawPolygon()", e );
 					//get the polygon's current vertices
 					var verticeAry	= e.vertices;
 
 					//clear the previous drawings
-					view.graphics.removeAll();
+					mapView.graphics.removeAll();
 
 					//create a new one to replace it
-					var newPoly	= createPolygon( verticeAry );
+					//create the geometry to represent the clicked points as a polygon
+					var polygon	= createPolygon( verticeAry );
 
 					//turn the polygon into a graphic
-					var polyGraph = createGraphic( newPoly );
+					var polyGraph = createGraphic( polygon );
 					//replace the erased one
-					view.ui.add( polyGraph );
+					mapView.graphics.add( polyGraph );
 
-					var area = geometryEngine.geodesicArea( newPoly, "acres" );
+					var area = geometryEngine.geodesicArea( polygon, "acres" );
 
 					if( area < 0 ){
 						//something went wrong?
 						//simplify & try again
-						var simplifiedPoly = geometryEngine.simplify( newPoly );
+						var simplifiedPoly = geometryEngine.simplify( polygon );
 						if( simplifiedPoly ){
 							area = geometryEngine.geodesicArea( simplifiedPoly, "acres" );
 						}
 
 					}
 
-					labelAreas( newPoly, area, "acres" );
+					labelAreas( polygon, area, "acres" );
 
 				}//drawPolygon()
 
 				//convenience method
 				function createPolygon( verticeAry ){
 					console.log("createPolygon()", verticeAry );
-
-					return new Polygon({
+					var poly = new Polygon({
 						rings: verticeAry
-						,spatialReference: view.spatialReference
+						,spatialReference: mapView.spatialReference
 					});
+					console.log("createPolygon() created:", poly )
+					return poly;
 
 				}//createPolygon()
 
 				//conveniece function
 				function createGraphic( polygon ){
 					console.log("createGraphic()", polygon );
-					 graphic = new Graphic({
-						geometry: polygon
-						,symbol: {
-							type: "simple-fill"
-							,color: [77, 237, 177, 0.5]
-							,style: "solid"
-							,outline: {
-								color: [255, 177, 177, 0.9]
-								,width: 2
-							}
-						}
+					var graphic = new Graphic({
+									geometry: polygon
+									,symbol: {
+										type: "simple-fill"
+										,color: [77, 237, 177, 0.5]
+										,style: "solid"
+										,outline: {
+											color: [255, 177, 177, 0.9]
+											,width: 2
+										}
+									}
 					});
 					console.log("createGraphic() created:", graphic );
 					return graphic;
@@ -171,23 +176,23 @@
 				function labelAreas( geomObj, area, units ){
 					console.log("labelAreas()", geomObj, area, units );
 					var textArea = new Graphic({
-						geomObj: geomObj.centroid
-						,symbol: {
-							type: "text"
-							,color: "white"
-							,haloColor: "black"
-							,haloSize: "2px"
-							,text: area.toFixed(2) + units
-							,xOffset: 3
-							,yOffset: 3
-							,font: {
-								size: 14
-								,family: "sans-serif"
-							}
-						}
+									geomObj: geomObj.centroid
+									,symbol: {
+										type: "text"
+										,color: "white"
+										,haloColor: "black"
+										,haloSize: "1px"
+										,text: area.toFixed(2) + units
+										,xoffset: 3
+										,yoffset: 3
+										,font: {
+											size: 14
+											,family: "sans-serif"
+										}
+									}
 					});
 					console.log("labelAreas() created;", textArea );
-					view.graphics.app( textArea );
+					mapView.graphics.add( textArea );
 				}
 
 
