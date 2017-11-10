@@ -16,11 +16,18 @@ html, body{
     margin: 0;
     height: 100%;
     width: 100%;
+	background: #b5bdc8;
+background: -moz-linear-gradient(-45deg, #b5bdc8 0%, #828c95 36%, #28343b 100%);
+background: -webkit-linear-gradient(-45deg, #b5bdc8 0%,#828c95 36%,#28343b 100%);
+background: linear-gradient(135deg, #b5bdc8 0%,#828c95 36%,#28343b 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b5bdc8', endColorstr='#28343b',GradientType=1 );
 }
-
+h1{
+	text-align: center;
+}
 #divContainer{
-	height: 80%; width: 80%;
-	margin: 35px auto;
+	height: 80%; width: 100%;
+	margin: 0px auto;
 }
 
 
