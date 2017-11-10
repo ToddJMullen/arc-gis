@@ -115,8 +115,8 @@
 						view: mapView
 						//note that I changed the emphasis of these name definitions to categorical
 						//I DO NOT know if that will interfere with behavior due to library definition mis-alignments
-//						,pointSymbol: {//used for points
-						,symbolPoint: {//used for points
+						,pointSymbol: {//used for points
+//						,symbolPoint: {//my name(s) don't match api & are ignored
 							type: "simple-marker"
 							,style: "square"
 							,color: "#efca55"
@@ -126,15 +126,15 @@
 								,width: 3
 							}
 						}
-//						,polylineSymbol: {
-						,symbolPolyline: {
+						,polylineSymbol: {//overrides API definition
+//						,symbolPolyline: {//ignored & default used instead
 							type: "simple-line"
 							,color: "#8a3f77"
 							,width: "4"
 							,style: "dash"
 						}
-//						,polygonSymbol: {
-						,symbolPolygon: {
+						,polygonSymbol: {
+//						,symbolPolygon: {
 							type: "simple-fill"
 							,color: "rgba(233,23,155, 0.7)"
 							,style: "solid"
