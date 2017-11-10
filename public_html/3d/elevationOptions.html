@@ -24,14 +24,14 @@
 		<script src="https://js.arcgis.com/4.5/"></script>
 
 		<style>
-			
+
 
 			#divElevation{
 			  font-family: monospace;
 			  padding: 12px;
 			  background-color: rgba(0, 0, 0, 0.7);
 			  color: white;
-			  position: absolute; top: 0; right: 0;
+			  /*position: absolute; top: 70px; right: 0;*/
 			}
 
 			.right {
@@ -39,11 +39,12 @@
 				padding-right: 5px;
 			}
 
-			select {
+			select, input {
 			  width: 180px;
+			  background-color: #555;
 			}
 
-			select option, input {
+			select option {
 			  width: 180px;
 			}
 		</style>
@@ -92,22 +93,138 @@
 				"esri/WebScene"
 				,"esri/views/SceneView"
 				,"esri/layers/FeatureLayer"
-				,'esir/layers/LayerList'
+				,'esri/widgets/LayerList'
 
 				, "dojo/domReady!"
 			], function (WebScene, SceneView, FeatureLayer, LayerList) {
 				console.log("domReady() Creating Map & SceneView...");
 
-				var map = new Map({
-					basemap: app.MAP_TYPE.STREETS
-				});
-
-				var view = new SceneView({
+				var webscene	= new WebScene({
+					portalItem: {
+						id: "82b1268e2dda4c0bb04d2f48e38652b8"
+					}
+				})
+				,mapView = new SceneView({
 					container: "divContainer"
-					, map: map
-					, zoom: 4
-					, center: app.MAP_COORDS.SWEDEN_NORTH
-				});
+					, map: webscene
+//					, zoom: 4
+//					, center: app.MAP_COORDS.SWEDEN_NORTH
+				})
+				;
+
+				mapView.ui.add("divElevation", app.POSITION.TOP_RIGHT );
+
+				//we want to do most everything after the resources are all available
+				mapView.then( setupElevationOptions );
+
+				function setupElevationOptions(e){
+					console.log("setupElevationOptions()", e );
+
+					//we want to work with the FeaturLayer with the balloons in the webscene
+					// we get it by filtering the layer's by title
+					var balloonLayer = webscene.layers.find( function(layer){
+						return layer.title = "Balloon Layer";
+					})
+					,currentElevationData = {
+						mode: "relative-to-ground"
+						,offset: 0
+						,featureExpressionInfo: {
+							expression: "Geometry($feature).z * 10"
+						}
+						,unit: "meters"
+					}
+					,selMode		= document.getElementById("selMode")
+					,selUnit		= document.getElementById("selUnit")
+					,tiOffset		= document.getElementById("tiOffset")
+					,tiExpression	= document.getElementById("tiExpression")
+					;
+
+					balloonLayer.elevationInfo = currentElevationData;
+
+					//attach behaviors
+					selMode.addEventListener("change", updateElevationMode );
+					selUnit.addEventListener("change", updateElevationSettings );
+					document.querySelectorAll("input").forEach(function(input){
+						input.addEventListener("change", updateElevationSettings );
+						input.addEventListener("keyup", onKeyup );
+					});
+
+
+					//define behaviors / actions
+
+					function updateElevationMode(e){
+						console.log("updateElevationMode()", e );
+						var select = e.target
+						,mode	= select.options[select.selectedIndex].value
+						//seems like an obtuse way to get the value
+
+						if( mode == "on-the-ground" ){
+							inputsEditable(false);
+						}
+
+						if( currentElevationData.mode == "on-the-ground" ){
+							inputsEditable(true);
+						}
+
+						currentElevationData.mode = mode;
+						balloonLayer.elevationInfo = currentElevationData;
+
+					}//updateElevationMode()
+
+
+					function updateElevationSettings(e){
+						console.log("updateElevationSettings()", e );
+						switch( e.target.id ){
+							case "tiExpression" :
+								var expr = e.target.value != "" ? e.target.value : 0;
+								currentElevationData.featureExpressionInfo = expr;
+								break;
+							case "tiOffset": currentElevationData.offset = tiOffset.value;
+								break;
+							case "selUnit": currentElevationData.unit = selUnit.value;
+								break;
+							case "selMode": currentElevationData.mode = selMode.value;
+
+						}//switch()
+
+						console.log("updateElevationSettings() updating with:", currentElevationData );
+
+						balloonLayer.elevationInfo = currentElevationData;
+
+					}//updateElevationSettings()
+
+					function inputsEditable(bool){
+						if( bool ){
+							tiOffset.removeAttribute("disabled");
+							tiExpression.removeAttribute("disabled");
+							selUnit.removeAttribute("disabled");
+						} else {
+							tiOffset.setAttribute("disabled", true );
+							tiExpression.setAttribute("disabled", true );
+							selUnit.setAttribute("disabled", true );
+						}
+					}
+
+
+					function onKeyup(e){
+						if( e.keyCode == 13 ){
+							updateElevationSettings(e);
+						}
+					}
+
+
+					//there is a buildings layer that we can toggle on/off
+					var buildsLayer = webscene.layers.find( function(layer){
+						return layer.title == "Buildings";
+					});
+
+					mapView.ui.add( new LayerList({
+						view: mapView
+					}), app.POSITION.BOT_LEFT );
+
+
+
+				}//setupElevationOptions()
 
 
 
