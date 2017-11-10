@@ -6,8 +6,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="/ArcGIS/images/icons/favicon.png" rel="icon" type="image/png" />
 		<!-- refs
-		https
-		https
+		https://developers.arcgis.com/javascript/latest/sample-code/sketch-geometries/index.html
+		https://developers.arcgis.com/javascript/latest/sample-code/sandbox/index.html?sample=draw-measure
 		-->
 
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
@@ -22,38 +22,117 @@
 		<script src="/ArcGIS/js/App.js" type="text/javascript"></script>
 		<script src="https://js.arcgis.com/4.5/"></script>
 
-<!--
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
-		<script src="js/App.js" type="text/javascript"></script>-->
+		<!--
+				<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+				<script src="js/App.js" type="text/javascript"></script>-->
 
 	</head>
 	<body>
 
 		<h1>ArcGIS 2D, v4.5, 2D Sketch Geometries</h1>
-		<div id="divContainer"></div>
+		<div id="divContainer">
+			<div id="topbar">
+			  <button id="btnPoint"  class="action-button esri-icon-blank-map-pin" type="button"
+					title="Draw point"></button>
+			  <button id="btnPolyline" class="action-button esri-icon-polyline" type="button"
+					title="Draw polyline"></button>
+			  <button id="btnPolygon" class="action-button esri-icon-polygon" type="button"
+					title="Draw polygon"></button>
+			  <button id="btnReset" class="action-button esri-icon-trash" type="button"
+					title="Clear graphics"></button>
+			</div>
+		</div>
 
 		<script>
-			require([
-				"esri/Map"
-				,"esri/views/MapView"
-				,"dojo/ready"
-			  ], function(Map, MapView) {
-				  console.log("domReady() Creating Map & MapView...");
+			require( [
+					"esri/views/MapView"
+					,"esri/WebMap"
+					,"esri/widgets/sketch/SketchViewModel"
+					,"esri/Graphic"
 
-				  var map = new Map({
-					  basemap: app.MAP_TYPE.STREETS
-				  });
+					,"dojo/domReady!"
+			], function(
+				MapView
+				,WebMap
+				,SketchViewModel
+				,Graphic
+			){
+				console.log( "domReady() sketch geometries..." );
 
-				  var view = new MapView({
-					  container: "divContainer"
-					  ,map: map
-					  ,zoom: 4
-					  ,center: [15, 65]
-				  });
+				// Arctic Ocean Basemap
+				var webmap = new WebMap({
+					portalItem: { // autocasts as new PortalItem()
+						id: "c7381cb155a043a2bba2b84566677262"
+					}
+				})
+
+				,mapView = new MapView( {
+					container: "divContainer"
+					, map: webmap
+					, zoom: 4
+					, center: [ 15, 65 ]
+				} )
+
+				;
+
+				mapView.then(function onViewLoaded(e){
+					console.log("onViewLoaded()", e );
+
+					//create a sketch view model
+					var sketchViewModel = new SketchViewModel({
+						view: mapView
+						//note that I changed the emphasis of these name definitions to categorical
+						//I DO NOT know if that will interfere with behavior due to library definition mis-alignments
+						,symbolPoint: {//used for points
+							type: "simple-marker"
+							,style: "square"
+							,color: "#efca55"
+							,size: "16px"
+							,outline: {
+								color: "#ccffcc"
+								,width: 3
+							}
+						}
+						,symbolPolyline: {
+							type: "simple-line"
+							,color: "#8a3f77"
+							,width: "4"
+							,style: "dash"
+						}
+						,symbolPolygon: {
+							type: "simple-fill"
+							,color: "rgba(233,23,155, 0.7)"
+							,style: "solid"
+							,outline: {
+								color: "white"
+								,width: "1"
+							}
+						}
+					});//sketchViewModel
+
+
+					//attach event listeners
+					sketchViewModel.on("draw-complete", captureCompletedGraphic )
+
+					function captureCompletedGraphic(e){
+						console.log("captureCompletedGraphic()", e );
+
+						mapView.graphics.add( e.graphic );
+						setActiveButton();
+
+					}//captureCompletedGraphic()
 
 
 
-			  });
+				})//onViewLoaded()
+				;
+
+
+
+
+
+
+			} );
 		</script>
 		<script src="/ArcGIS/js/Menu.js" type="text/javascript"></script>
 	</body>
