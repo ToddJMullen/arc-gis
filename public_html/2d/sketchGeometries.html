@@ -25,20 +25,51 @@
 		<!--
 				<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
 				<script src="js/App.js" type="text/javascript"></script>-->
+		<style>
+			
+			#topbar {
+			  background: #fff;
+			  position: absolute;
+			  top: 15px;
+			  right: 15px;
+			  padding: 10px;
+			}
 
+			.action-button {
+			  font-size: 16px;
+			  background-color: transparent;
+			  border: 1px solid #D3D3D3;
+			  color: #6e6e6e;
+			  height: 32px;
+			  width: 32px;
+			  text-align: center;
+			  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+			}
+
+			.action-button:hover,
+			.action-button:focus {
+			  background: #0079c1;
+			  color: #e4e4e4;
+			}
+
+			.active {
+			  background: #0079c1;
+			  color: #e4e4e4;
+			}
+		</style>
 	</head>
 	<body>
 
 		<h1>ArcGIS 2D, v4.5, 2D Sketch Geometries</h1>
 		<div id="divContainer">
 			<div id="topbar">
-			  <button id="btnPoint"  class="action-button esri-icon-blank-map-pin" type="button"
+			  <button id="btnDrawPoint"  class="action-button esri-icon-blank-map-pin" type="button"
 					title="Draw point"></button>
-			  <button id="btnPolyline" class="action-button esri-icon-polyline" type="button"
+			  <button id="btnDrawPolyline" class="action-button esri-icon-polyline" type="button"
 					title="Draw polyline"></button>
-			  <button id="btnPolygon" class="action-button esri-icon-polygon" type="button"
+			  <button id="btnDrawPolygon" class="action-button esri-icon-polygon" type="button"
 					title="Draw polygon"></button>
-			  <button id="btnReset" class="action-button esri-icon-trash" type="button"
+			  <button id="btnRemoveAll" class="action-button esri-icon-trash" type="button"
 					title="Clear graphics"></button>
 			</div>
 		</div>
@@ -47,7 +78,7 @@
 			require( [
 					"esri/views/MapView"
 					,"esri/WebMap"
-					,"esri/widgets/sketch/SketchViewModel"
+					,"esri/widgets/Sketch/SketchViewModel"
 					,"esri/Graphic"
 
 					,"dojo/domReady!"
@@ -75,14 +106,16 @@
 
 				;
 
+				//wait until the layer / map is loaded then define utils & attach the listeners
 				mapView.then(function onViewLoaded(e){
 					console.log("onViewLoaded()", e );
 
-					//create a sketch view model
+					//define handles
 					var sketchViewModel = new SketchViewModel({
 						view: mapView
 						//note that I changed the emphasis of these name definitions to categorical
 						//I DO NOT know if that will interfere with behavior due to library definition mis-alignments
+//						,pointSymbol: {//used for points
 						,symbolPoint: {//used for points
 							type: "simple-marker"
 							,style: "square"
@@ -93,12 +126,14 @@
 								,width: 3
 							}
 						}
+//						,polylineSymbol: {
 						,symbolPolyline: {
 							type: "simple-line"
 							,color: "#8a3f77"
 							,width: "4"
 							,style: "dash"
 						}
+//						,polygonSymbol: {
 						,symbolPolygon: {
 							type: "simple-fill"
 							,color: "rgba(233,23,155, 0.7)"
@@ -108,12 +143,24 @@
 								,width: "1"
 							}
 						}
-					});//sketchViewModel
+					})//sketchViewModel
+					//buttons
+					,btnDrawPoint		= document.getElementById("btnDrawPoint")
+					,btnDrawPolyline	= document.getElementById("btnDrawPolyline")
+					,btnDrawPolygon		= document.getElementById("btnDrawPolygon")
+					,btnRemoveAll		= document.getElementById("btnRemoveAll")
+					
+					;
 
 
 					//attach event listeners
-					sketchViewModel.on("draw-complete", captureCompletedGraphic )
-
+					sketchViewModel.on("draw-complete", captureCompletedGraphic );
+					btnDrawPoint.onclick	= drawPoint;
+					btnDrawPolyline.onclick	= drawPolyline;
+					btnDrawPolygon.onclick	= drawPolygon;
+					btnRemoveAll.onclick	= clearMap;
+					
+					//define event handlers
 					function captureCompletedGraphic(e){
 						console.log("captureCompletedGraphic()", e );
 
@@ -122,6 +169,41 @@
 
 					}//captureCompletedGraphic()
 
+					function drawPoint(e){
+						console.log("drawPoint()", e );
+						sketchViewModel.create("point");
+						setActiveButton(this);
+					}//drawPoint()
+
+					function drawPolyline(e){
+						console.log("drawPolyline()", e );
+						sketchViewModel.create("polyline");
+						setActiveButton(this);
+					}//drawPolyline()
+
+					function drawPolygon(e){
+						console.log("drawPolygon()", e );
+						sketchViewModel.create("polygon");
+						setActiveButton(this);
+					}//drawPolygon()
+
+					function clearMap(e){
+						console.log("clearMap()", e );
+						mapView.graphics.removeAll();
+						sketchViewModel.reset();
+						setActiveButton();
+					}//clearMap()
+					
+					function setActiveButton( btn ){
+						mapView.focus();
+						var elemAry = document.getElementsByClassName("active");
+						for( var i = 0; i < elemAry.length; i++ ){
+							elemAry[i].classList.remove("active");
+						}
+						if( btn ){
+							btn.classList.add("active");
+						}
+					}
 
 
 				})//onViewLoaded()
