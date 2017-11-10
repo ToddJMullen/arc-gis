@@ -115,10 +115,13 @@
 				mapView.ui.add("divElevation", app.POSITION.TOP_RIGHT );
 
 				//we want to do most everything after the resources are all available
-				mapView.then( setupElevationOptions );
+				webscene.then( setupElevationOptions );
 
 				function setupElevationOptions(e){
 					console.log("setupElevationOptions()", e );
+
+					console.log("setupElevationOptions() webscene layers:", webscene.layers );
+
 
 					//we want to work with the FeaturLayer with the balloons in the webscene
 					// we get it by filtering the layer's by title
