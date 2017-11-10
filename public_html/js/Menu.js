@@ -19,6 +19,7 @@ pageAry = [
 	,Page( "widgets.html", "2d MapView", "Intro Widgets", "2d" )
 	,Page( "basic-3d.html", "3d SceneView", "Intro to SceneView", "3d" )
 	,Page( "3d-template.html", "3d Template", "3D Template", "3d" )
+	,Page( "elevationOptions.html", "3d Elevation Options", "3D Elevations", "3d" )
 	,Page( "localScene.html", "3d Local Scene", "LocalScene", "3d" )
 	,Page( "tileLayer-3d.html", "3d Tile Layer", "3D TileLayer", "3d" )
 ];
